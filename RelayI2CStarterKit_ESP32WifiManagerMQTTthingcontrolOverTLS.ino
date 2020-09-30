@@ -142,7 +142,7 @@ void loop()
     startMillis = currentMillis;  //IMPORTANT to save the start time of the current LED state.
   }
 
-  //send telemetry
+  //send 
   if (currentMillis - starSendTeletMillis >= periodSendTelemetry)  //test whether the period has elapsed
   {
 
@@ -228,7 +228,7 @@ void processTele(char jsonTele[])
 
   char *aString = jsonTele;
   Serial.println("OK");
-  Serial.print(F("+:topic v1/devices/me/telemetry , "));
+  Serial.print(F("+:topic v1/devices/me/ , "));
   Serial.println(aString);
   client.publish( "v1/devices/me/telemetry", aString);
 }
@@ -300,10 +300,10 @@ void callback(char* topic, byte* payload, unsigned int length)
     }
     aString.concat("}");
     Serial.println("OK");
-    Serial.print(F("+:topic v1/devices/me/attributes , "));
+    Serial.print(F("+:topic v1/devices/me/telemetry , "));
     Serial.println(aString);
 
-    client.publish( "v1/devices/me/attributes", aString.c_str());
+    client.publish( "v1/devices/me/telemetry", aString.c_str());
 
   }
   else
