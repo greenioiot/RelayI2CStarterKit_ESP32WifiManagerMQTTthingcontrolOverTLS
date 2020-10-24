@@ -22,7 +22,7 @@ HardwareSerial modbus(2);
 #define WIFI_AP ""
 #define WIFI_PASSWORD ""
 
-String deviceToken = "mtdI6pDUu6WwkJRcJBTu";  //Sripratum@thingcontrio.io
+String deviceToken = "mBqFnwLw6sLUsg3lIv3M";  //Sripratum@thingcontrio.io
 //String deviceToken = "tOkvPadbQqLFsmc0sCON";
 char thingsboardServer[] = "mqtt.thingcontrol.io";
 
@@ -81,7 +81,8 @@ Meter meter[10] ;
 //signal meta ;
 
 void setup() {
-
+  pinMode(4, OUTPUT);
+  digitalWrite(4, LOW);
   Serial.begin(115200);
 
   modbus.begin(9600, SERIAL_8N1, 16, 17);
@@ -142,7 +143,7 @@ void loop()
     startMillis = currentMillis;  //IMPORTANT to save the start time of the current LED state.
   }
 
-  //send 
+  //send
   if (currentMillis - starSendTeletMillis >= periodSendTelemetry)  //test whether the period has elapsed
   {
 
@@ -265,7 +266,7 @@ void callback(char* topic, byte* payload, unsigned int length)
   String methodName = String((const char*)data["method"]);
   Serial.println(methodName);
 
-  if (methodName.startsWith("setValue"))
+  if (methodName.startsWith("setV"))
   {
     char json[length + 1];
     strncpy (json, (char*)payload, length);
@@ -281,7 +282,7 @@ void callback(char* topic, byte* payload, unsigned int length)
     int relayId = meth.substring(meth.length() - 1, meth.length()).toInt();
 
     Serial.println(relayId);
-    String aString = "{\"value";
+    String aString = "{\"v";
 
     aString.concat(relayId);
     aString.concat("\":");
@@ -296,6 +297,8 @@ void callback(char* topic, byte* payload, unsigned int length)
       mcp.digitalWrite(relayId, LOW);
       Serial.println("off");
       aString.concat("0");
+      delay(2000);
+      digitalWrite(4, HIGH);
 
     }
     aString.concat("}");
